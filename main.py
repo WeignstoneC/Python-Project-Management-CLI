@@ -2,15 +2,6 @@ import argparse
 from pathlib import Path
 from typing import List, Optional
 
-try:
-    from rich.console import Console
-    from rich.table import Table
-except ImportError:  # pragma: no cover - optional dependency fallback
-    Console = None
-    Table = None
-
-from utils.storage import ProjectManager
-
 
 def build_parser() -> argparse.ArgumentParser:
     """Build the CLI argument parser with subcommands for users, projects, and tasks."""
@@ -61,20 +52,6 @@ def parse_contributors(values: List[str]) -> List[str]:
     return parsed
 
 
-def _render_table(rows: List[tuple], headers: List[str]) -> None:
-    """Render a list of rows as a simple text table or a Rich table when available."""
-    if Console is None or Table is None:
-        for row in rows:
-            print(" | ".join(row))
-        return
-
-    console = Console()
-    table = Table(show_header=True, header_style="bold magenta")
-    for header in headers:
-        table.add_column(header)
-    for row in rows:
-        table.add_row(*row)
-    console.print(table)
 
 
 def run_cli(args: Optional[List[str]] = None, data_file: Optional[Path] = None) -> None:
