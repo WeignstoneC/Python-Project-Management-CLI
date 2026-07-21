@@ -5,6 +5,54 @@ from __future__ import annotations
 from typing import List
 
 
+class BaseModel:
+    """Base class that assigns a simple sequential identifier to each model."""
+
+    _id_counter = 0
+
+    def __init__(self) -> None:
+        """Create a model instance with an incrementing identifier."""
+        type(self)._id_counter += 1
+        self.id = type(self)._id_counter
+
+
+class Person(BaseModel):
+    """Represents a person in the system with a validated name and email."""
+
+    def __init__(self, name: str, email: str | None = None) -> None:
+        """Initialize a person with a name and an optional email address."""
+        super().__init__()
+        self._name = ""
+        self._email = ""
+        self.name = name
+        self.email = email or ""
+
+    @property
+    def name(self) -> str:
+        """Return the person's current name."""
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        """Validate and store the person's name."""
+        if not value or not value.strip():
+            raise ValueError("Name cannot be empty")
+        self._name = value.strip()
+
+    @property
+    def email(self) -> str:
+        """Return the person's email address."""
+        return self._email
+
+    @email.setter
+    def email(self, value: str) -> None:
+        """Store the person's email address."""
+        self._email = value.strip()
+
+    def __str__(self) -> str:
+        """Return the person's display name."""
+        return self.name
+
 
 class User(Person):
     """Represents a team member who can own multiple projects."""
